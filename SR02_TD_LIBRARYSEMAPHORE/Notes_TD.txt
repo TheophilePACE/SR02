@@ -1,0 +1,29 @@
+Notes sur le TD library sémaphores
+
+Un programme C qui voudra  utiliser ces fonctions sera "linké"  avec la  bibliothèque :
+"gcc -o prog prog.c -L. -lsempv".
+
+Pour voir les sémaphores créés, utilisez la commande " ipcs -s"
+Pour détruire des sémaphores "oubliés", utilisez la commande " ipcrm -s ID".
+
+
+
+P ou V
+int semop ( int semid, struct sembuf *sops, unsigned nsops )
+Les paramètres:
+semid: l'identifiant de votre sémaphore, comme d'habitude. Celui qui vous a été donné par semget.
+sops: l'adresse de votre structure sembuf
+nsops: le nombre d'opérations à effectuer. Ici nous n'avons qu'une seule opération à effectuer, donc on mettra 1. Si vous en avez plusieurs, il vous faudra passer un tableau de structures sembuf dans le paramètre sops.
+
+Teste existance semaphore :
+semget(IPC_PRIVATE, N_SEM,0) == -1
+
+int semid;
+semid=semget(IPC_PRIVATE, N_SEM, 0);
+if(semid==-1)
+{
+  if(errno==ENOENT)
+    return -1; //pas de groupe de sémaphore
+  else //ou if(sem>=N_SEM||sem<0)
+      return -2;//sem incorrect
+}
